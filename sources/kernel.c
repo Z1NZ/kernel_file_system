@@ -1,7 +1,11 @@
 #include "kernel.h"
 #include "keyboard.h"
+#include "utils.h"
 
 unsigned int j = 0;
+unsigned int cursor_x;
+unsigned int cursor_y;
+
 char *vidptr = (char *)VGA_ADDRESS;
 unsigned int current_loc = 0;
 
@@ -11,6 +15,8 @@ unsigned int	new_line()
 		current_loc += 2;
 	while (current_loc / 2 % MAX_COLS)
 		current_loc += 2;
+	cursor_y++;
+	move_cursor();
 	return (current_loc);
 }
 
@@ -34,10 +40,7 @@ void keyboard_handler_main(void) {
 		{
 			keycode = read_port(KEYBOARD_DATA_PORT);
 			if(keycode < 0)
-			{	
-			//	print("in keyboard_handler keycode < 0 so return is called\n");
 				return;
-			}
 			if (keyboard_map[keycode] == '\n')
 				current_loc = new_line();
 			else if (keyboard_map[keycode] == '\b')
@@ -46,6 +49,7 @@ void keyboard_handler_main(void) {
 				{
 					current_loc -= 2;
 					vidptr[current_loc] = 0;
+//					cursor_x--;
 				}
 			}
 			else
@@ -54,6 +58,7 @@ void keyboard_handler_main(void) {
 				vidptr[current_loc++] = GREEN;
 			}
 			current_loc = handle_scrolling(current_loc);
+//			move_cursor();
 		}
 }
 
@@ -61,16 +66,13 @@ void kmain(void)
 {
 	char *str = "my first kernel\n";
 	
-	/* this loops clears the screen
-	* there are 25 lines each of 80 columns; each element takes 2 bytes */
 	black_screen();
 	j = 0;
 
-	/* this loop writes the string to video memory */
 	print(str);
-	print_color(str, RED);
-	print("dans le kmain\n");
-	kb_init();
+	print_color("we can write in red also \n", RED);
+	print_color("even in blue if we wish\n", BLUE);
+	//kb_init();
 	while(1)
 		keyboard_handler();	
 

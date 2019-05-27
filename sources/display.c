@@ -3,6 +3,8 @@
 extern int current_loc;
 extern int j;
 extern char *vidptr;
+extern unsigned int cursor_x;
+extern unsigned int cursor_y;
 
 void	putchar(char c)
 {
@@ -28,6 +30,8 @@ void	putstr(char *str)
 			putchar(str[j]);
 			putcolor(GREEN);
 			current_loc += 2;
+		//	cursor_x++;
+		//	move_cursor();
 		}
 		j++;
 	}
@@ -47,6 +51,7 @@ void	putstr_color(char *str, int color)
 			putchar(str[j]);
 			putcolor(color);
 			current_loc += 2;
+		//	cursor_x += 2;
 		}
 		j++;
 	}
@@ -84,7 +89,16 @@ void	putnbr(int nb)
 		putnbr(nb / 10);
 		putchar((nb % 10) + '0');
 	}
+}
 
+void	move_cursor()
+{
+   // The screen is 80 characters wide...
+   uint16 cursorLocation = cursor_y * MAX_COLS + cursor_x;
+   write_port(0x3D4, 14);                  // Tell the VGA board we are setting the high cursor byte.
+   write_port(0x3D5, cursorLocation >> 8); // Send the high cursor byte.
+   write_port(0x3D4, 15);                  // Tell the VGA board we are setting the low cursor byte.
+   write_port(0x3D5, cursorLocation);      // Send the low cursor byte.
 }
 
 void	black_screen(void)
@@ -95,6 +109,9 @@ void	black_screen(void)
 		vidptr[j + 1] = BLACK; 		
 		j = j + 2;
 	}
+	cursor_y = 0;
+	cursor_x = 0;
+//	move_cursor();
 }
 
 int	get_screen_offset(int col, int row) 
@@ -122,6 +139,6 @@ int	handle_scrolling(int  cursor_offset)
 	for (i = 0; i < MAX_COLS * 2; i++) 
 		last_line[i] = 0;
 	// Move  the  offset  back  one row , such  that it is now on the  last// row , rather  than  off the  edge of the  screen.
-	cursor_offset  -= 2 * MAX_COLS;//  Return  the  updated  cursor  position.
+	cursor_offset -= 2 * MAX_COLS;//  Return  the  updated  cursor  position.
 	return  cursor_offset;
 }

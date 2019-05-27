@@ -19,10 +19,12 @@ extern void write_port(unsigned short port, unsigned char data);
 extern char read_port(unsigned short port);
 extern void print(char *str);
 extern void print_color(char *str, int color);
-extern void putnbr(int nb);
+//extern void putnbr(int nb);
 extern unsigned int new_line(void);
 extern void black_screen(void);
 extern int handle_scrolling(int cursor_offset);
+//extern void monitor_clear(void);
+extern void move_cursor(void);
 
 enum vga_color {
     BLACK,
