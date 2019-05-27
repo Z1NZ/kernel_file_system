@@ -1,6 +1,9 @@
 #ifndef KEYBOARD_MAP_H
 #define KEYBOARD_MAP_H
 
+#define KEYBOARD_DATA_PORT 0x60
+#define KEYBOARD_STATUS_PORT 0x64
+
 unsigned char keyboard_map[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */

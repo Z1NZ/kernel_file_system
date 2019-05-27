@@ -1,17 +1,17 @@
 #include "kernel.h"
 
-extern int i;
+extern int current_loc;
 extern int j;
 extern char *vidptr;
 
-void	kputchar(char c)
+void	putchar(char c)
 {
-	vidptr[i] = c;
+	vidptr[current_loc] = c;
 }
 
 void	putcolor(int color)
 {
-	vidptr[i + 1] = color;
+	vidptr[current_loc + 1] = color;
 }
 
 void	putstr(char *str)
@@ -22,15 +22,23 @@ void	putstr(char *str)
 	{
 		/* the character's ascii */
 		if (str[j] == '\n')
-			move_y();
+			new_line();
 		else
 		{
-			kputchar(str[j]);
+			putchar(str[j]);
 			putcolor(GREEN);
-			i = i + 2;
+			current_loc += 2;
 		}
 		j++;
 	}
+}
+
+int 	strlen(char *str)
+{
+	unsigned int index = 0; 
+	while (str && str[index])
+		index++;
+	return index;
 }
 
 void	print(char *str)
@@ -38,12 +46,29 @@ void	print(char *str)
 	putstr(str);
 }
 
-void	black_screen()
+void	putnbr(int nb)
+{
+	if (nb < 0)
+	{
+		putchar('-');
+		nb = -nb;
+	}
+	if (nb < 10)
+		putchar(nb + '0');
+	else
+	{
+		putnbr(nb / 10);
+		putchar((nb % 10) + '0');
+	}
+
+}
+
+void	black_screen(void)
 {
 	while(j < 80 * 25 * 2) 
 	{
 		vidptr[j] = ' ';
-		vidptr[j+1] = BLACK; 		
+		vidptr[j + 1] = BLACK; 		
 		j = j + 2;
 	}
 }

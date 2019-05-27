@@ -23,7 +23,7 @@ extern keyboard_handler_main
 
 keyboard_handler:                 
 	call    keyboard_handler_main
-	iretd
+	ret
 
 read_port:
 	mov edx, [esp + 4]

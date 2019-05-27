@@ -21,21 +21,14 @@ FLAGS = -m32 -fno-builtin -fno-exceptions -fno-stack-protector -nostdlib -nodefa
 
 all:
 	$(CASM) -f elf32 $(SRC_ASM) -o kasm.o
-	make $(K_NAME)
-	ld -m elf_i386 -T $(SRC_LD) -o $(K_NAME) kasm.o kc.o
-
-$(K_NAME): $(OBJ)
-	$(CC) -I $(INC) $(FLAGS) $^ -o $@
-
-$(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	mkdir -p $(OBJ_PATH)
-	$(CC) -I $(INC) $(FLAGS) -o $@ -c $<
+	$(CC) -I $(INC) $(FLAGS) $(SRC_C) -c
+	ld -m elf_i386 -T $(SRC_LD) -o $(K_NAME) *.o
 
 run:
 	qemu-system-i386 -kernel $(K_NAME)
 
 clean:
-	rm -rf kasm.o kc.o
+	rm -rf *.o
 
 fclean: clean
 	rm -rf $(K_NAME)

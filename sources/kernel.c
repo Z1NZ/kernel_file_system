@@ -1,19 +1,22 @@
 #include "kernel.h"
 #include "keyboard.h"
 
-int i = 0;
-int j = 0;
+unsigned int j = 0;
 char *vidptr = (char *)VGA_ADDRESS;
 unsigned int current_loc = 0;
 
-void	move_y()
+unsigned int	new_line()
 {
-	while (i / 2 % 80)
-		i = i + 2;
+	if (current_loc / 2 % 80 == 0)
+		current_loc += 2;
+	while (current_loc / 2 % 80)
+		current_loc += 2;
+	return (current_loc);
 }
 
 void kb_init(void)
 {
+	print("kb_init\n");
 	/* 0xFD is 11111101 - enables only IRQ1 (keyboard)*/
 	write_port(0x21 , 0xFD);
 }
@@ -22,17 +25,27 @@ void keyboard_handler_main(void) {
 	unsigned char status;
 	char keycode;
 	/* write EOI */
-	write_port(0x20, 0x20);
-
-	status = read_port(KEYBOARD_STATUS_PORT);
-	/* Lowest bit of status will be set if buffer is not empty */
-	if (status & 0x01) {
-		keycode = read_port(KEYBOARD_DATA_PORT);
-		if(keycode < 0)
-			return;
-		vidptr[current_loc++] = keyboard_map[keycode];
-		vidptr[current_loc++] = 0x07;
-	}
+	
+//		write_port(0x20, 0x20);
+	//	print("in keyboard handler\n");
+		status = read_port(KEYBOARD_STATUS_PORT);
+		/* Lowest bit of status will be set if buffer is not empty */
+		if (status & 0x01)
+		{
+			keycode = read_port(KEYBOARD_DATA_PORT);
+			if(keycode < 0)
+			{	
+			//	print("in keyboard_handler keycode < 0 so return is called\n");
+				return;
+			}
+			if (keyboard_map[keycode] == '\n')
+				current_loc = new_line();
+			else
+			{
+				vidptr[current_loc++] = keyboard_map[keycode];
+				vidptr[current_loc++] = GREEN;
+			}
+		}
 }
 
 void kmain(void)
@@ -48,7 +61,8 @@ void kmain(void)
 	print(str);
 	print("dans le kmain\n");
 	kb_init();
-	while (1)
+	while(1)
+		keyboard_handler();	
 
 	return;
 }
