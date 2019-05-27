@@ -7,9 +7,9 @@ unsigned int current_loc = 0;
 
 unsigned int	new_line()
 {
-	if (current_loc / 2 % 80 == 0)
+	if (current_loc / 2 % MAX_COLS == 0)
 		current_loc += 2;
-	while (current_loc / 2 % 80)
+	while (current_loc / 2 % MAX_COLS)
 		current_loc += 2;
 	return (current_loc);
 }
@@ -45,6 +45,7 @@ void keyboard_handler_main(void) {
 				vidptr[current_loc++] = keyboard_map[keycode];
 				vidptr[current_loc++] = GREEN;
 			}
+			current_loc = handle_scrolling(current_loc);
 		}
 }
 

@@ -65,7 +65,7 @@ void	putnbr(int nb)
 
 void	black_screen(void)
 {
-	while(j < 80 * 25 * 2) 
+	while(j < MAX_COLS * MAX_ROWS * 2) 
 	{
 		vidptr[j] = ' ';
 		vidptr[j + 1] = BLACK; 		
@@ -73,3 +73,31 @@ void	black_screen(void)
 	}
 }
 
+int	get_screen_offset(int col, int row) 
+{
+    return (((row * MAX_COLS) + col) * 2);
+}
+
+void	memory_copy(char* source , char* dest , int  no_bytes) 
+{
+	int i;
+	
+	for ( i = 0; i < no_bytes; i++) 
+		*(dest + i) = *( source + i);
+}
+
+int	handle_scrolling(int  cursor_offset) 
+{
+	if (cursor_offset  < MAX_ROWS * MAX_COLS * 2) 
+		return  cursor_offset;
+	int i;
+	for (i = 1; i < MAX_ROWS; i++) 
+		memory_copy((char *)get_screen_offset(0, i) + VGA_ADDRESS , \
+		(char *)get_screen_offset(0, i - 1) + VGA_ADDRESS , MAX_COLS * 2);
+	char *last_line = (char *)get_screen_offset(0, MAX_ROWS - 1) + VGA_ADDRESS;
+	for (i = 0; i < MAX_COLS * 2; i++) 
+		last_line[i] = 0;
+	// Move  the  offset  back  one row , such  that it is now on the  last// row , rather  than  off the  edge of the  screen.
+	cursor_offset  -= 2 * MAX_COLS;//  Return  the  updated  cursor  position.
+	return  cursor_offset;
+}

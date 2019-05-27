@@ -9,6 +9,8 @@ typedef unsigned int uint32;
 #define VGA_ADDRESS 0xB8000
 #define BUFSIZE 2200
 #define NULL 0
+#define MAX_COLS 80
+#define MAX_ROWS 25
 
 uint16* vga_buffer;
 
@@ -19,6 +21,7 @@ extern void print(char *str);
 extern void putnbr(int nb);
 extern unsigned int new_line(void);
 extern void black_screen(void);
+extern int handle_scrolling(int cursor_offset);
 
 enum vga_color {
     BLACK,
