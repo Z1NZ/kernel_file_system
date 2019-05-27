@@ -33,6 +33,25 @@ void	putstr(char *str)
 	}
 }
 
+void	putstr_color(char *str, int color)
+{
+	j = 0;
+
+	while(str[j] != '\0') 
+	{
+		/* the character's ascii */
+		if (str[j] == '\n')
+			new_line();
+		else
+		{
+			putchar(str[j]);
+			putcolor(color);
+			current_loc += 2;
+		}
+		j++;
+	}
+}
+
 int 	strlen(char *str)
 {
 	unsigned int index = 0; 
@@ -44,6 +63,11 @@ int 	strlen(char *str)
 void	print(char *str)
 {
 	putstr(str);
+}
+
+void	print_color(char *str, int color)
+{
+	putstr_color(str, color);
 }
 
 void	putnbr(int nb)

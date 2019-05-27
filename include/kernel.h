@@ -18,6 +18,7 @@ extern void keyboard_handler(void);
 extern void write_port(unsigned short port, unsigned char data);
 extern char read_port(unsigned short port);
 extern void print(char *str);
+extern void print_color(char *str, int color);
 extern void putnbr(int nb);
 extern unsigned int new_line(void);
 extern void black_screen(void);

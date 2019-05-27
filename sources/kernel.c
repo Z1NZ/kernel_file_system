@@ -40,6 +40,14 @@ void keyboard_handler_main(void) {
 			}
 			if (keyboard_map[keycode] == '\n')
 				current_loc = new_line();
+			else if (keyboard_map[keycode] == '\b')
+			{
+				if ((current_loc / 2) % MAX_COLS)
+				{
+					current_loc -= 2;
+					vidptr[current_loc] = 0;
+				}
+			}
 			else
 			{
 				vidptr[current_loc++] = keyboard_map[keycode];
@@ -60,6 +68,7 @@ void kmain(void)
 
 	/* this loop writes the string to video memory */
 	print(str);
+	print_color(str, RED);
 	print("dans le kmain\n");
 	kb_init();
 	while(1)
