@@ -1,8 +1,9 @@
 #include "kernel.h"
 #include "keyboard.h"
-#include "utils.h"
+#include "tty_handler.h"
 
 unsigned int j = 0;
+unsigned int current_tty = 0;
 unsigned int cursor_x;
 unsigned int cursor_y;
 
@@ -27,7 +28,14 @@ void kb_init(void)
 	write_port(0x21 , 0xFD);
 }
 
-void keyboard_handler_main(void) {
+int	is_tty_sign(int keycode)
+{
+	if (keycode == 0x3b || keycode == 0x3c || keycode == 0x3d)
+		return 1;
+	return 0;
+}
+
+void	keyboard_handler_main(void) {
 	unsigned char status;
 	char keycode;
 	/* write EOI */
@@ -41,6 +49,12 @@ void keyboard_handler_main(void) {
 			keycode = read_port(KEYBOARD_DATA_PORT);
 			if(keycode < 0)
 				return;
+			if (is_tty_sign(keycode))
+			{
+				//print("change tty detect\n");
+				change_tty(keycode);
+				return;
+			}
 			if (keyboard_map[keycode] == '\n')
 				current_loc = new_line();
 			else if (keyboard_map[keycode] == '\b')

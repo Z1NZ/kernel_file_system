@@ -57,14 +57,6 @@ void	putstr_color(char *str, int color)
 	}
 }
 
-int 	strlen(char *str)
-{
-	unsigned int index = 0; 
-	while (str && str[index])
-		index++;
-	return index;
-}
-
 void	print(char *str)
 {
 	putstr(str);

@@ -1,6 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-void	*memcpy(void *dest, void *src, uint16 n);
+void	*memcpy(void *dest, const void *src, int n);
+int	strlen(char *str);
 
 #endif
