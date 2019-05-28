@@ -42,6 +42,7 @@ void	keyboard_handler_main(void) {
 //		write_port(0x20, 0x20);
 	//	print("in keyboard handler\n");
 		status = read_port(KEYBOARD_STATUS_PORT);
+		display_cursor();
 		/* Lowest bit of status will be set if buffer is not empty */
 		if (status & 0x01)
 		{
@@ -69,9 +70,7 @@ void	keyboard_handler_main(void) {
 				vidptr[current_loc++] = GREEN;
 			}
 			current_loc = handle_scrolling(current_loc);
-			print(" ");
-			set_cursor(current_loc - 1);
-			current_loc -= 2;
+			
 		}
 }
 

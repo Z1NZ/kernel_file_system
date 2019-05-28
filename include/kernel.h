@@ -28,6 +28,7 @@ extern void black_screen(void);
 extern int handle_scrolling(int cursor_offset);
 //extern void monitor_clear(void);
 extern void set_cursor(int offset);
+extern void display_cursor(void);
 
 enum vga_color {
     BLACK,

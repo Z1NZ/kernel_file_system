@@ -20,7 +20,6 @@ void	putstr(char *str)
 
 	while(str[j] != '\0') 
 	{
-		/* the character's ascii */
 		if (str[j] == '\n')
 			new_line();
 		else
@@ -29,7 +28,6 @@ void	putstr(char *str)
 			putcolor(GREEN);
 			current_loc += 2;
 		}
-		set_cursor(current_loc);
 		j++;
 	}
 }
@@ -48,7 +46,6 @@ void	putstr_color(char *str, int color)
 			putcolor(color);
 			current_loc += 2;
 		}
-		set_cursor(current_loc);
 		j++;
 	}
 }
@@ -77,15 +74,6 @@ void	putnbr(int nb)
 		putnbr(nb / 10);
 		putchar((nb % 10) + '0');
 	}
-}
-
-void	set_cursor(int offset) 
-{
-    offset /= 2;
-    write_port(REG_SCREEN_CTRL, 14);
-    write_port(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
-    write_port(REG_SCREEN_CTRL, 15);
-    write_port(REG_SCREEN_DATA, offset);
 }
 
 void	black_screen(void)
@@ -125,4 +113,20 @@ int	handle_scrolling(int  cursor_offset)
 	// Move  the  offset  back  one row , such  that it is now on the  last// row , rather  than  off the  edge of the  screen.
 	cursor_offset -= 2 * MAX_COLS;//  Return  the  updated  cursor  position.
 	return  cursor_offset;
+}
+
+void	set_cursor(int offset) 
+{
+    offset /= 2;
+    write_port(REG_SCREEN_CTRL, 14);
+    write_port(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
+    write_port(REG_SCREEN_CTRL, 15);
+    write_port(REG_SCREEN_DATA, offset);
+}
+
+void	display_cursor(void)
+{
+	print(" ");
+	set_cursor(current_loc - 1);
+	current_loc -= 2;
 }
