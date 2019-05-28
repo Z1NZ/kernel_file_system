@@ -33,6 +33,7 @@ void	putstr(char *str)
 		//	cursor_x++;
 		//	move_cursor();
 		}
+		set_cursor(current_loc);
 		j++;
 	}
 }
@@ -53,6 +54,7 @@ void	putstr_color(char *str, int color)
 			current_loc += 2;
 		//	cursor_x += 2;
 		}
+		set_cursor(current_loc);
 		j++;
 	}
 }
@@ -83,14 +85,13 @@ void	putnbr(int nb)
 	}
 }
 
-void	move_cursor()
+void	set_cursor(int offset) 
 {
-   // The screen is 80 characters wide...
-   uint16 cursorLocation = cursor_y * MAX_COLS + cursor_x;
-   write_port(0x3D4, 14);                  // Tell the VGA board we are setting the high cursor byte.
-   write_port(0x3D5, cursorLocation >> 8); // Send the high cursor byte.
-   write_port(0x3D4, 15);                  // Tell the VGA board we are setting the low cursor byte.
-   write_port(0x3D5, cursorLocation);      // Send the low cursor byte.
+    offset /= 2;
+    write_port(REG_SCREEN_CTRL, 14);
+    write_port(REG_SCREEN_DATA, (unsigned char)(offset >> 8));
+    write_port(REG_SCREEN_CTRL, 15);
+    write_port(REG_SCREEN_DATA, offset);
 }
 
 void	black_screen(void)

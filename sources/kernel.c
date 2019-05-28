@@ -17,7 +17,7 @@ unsigned int	new_line()
 	while (current_loc / 2 % MAX_COLS)
 		current_loc += 2;
 	cursor_y++;
-	move_cursor();
+//	move_cursor();
 	return (current_loc);
 }
 
@@ -28,7 +28,7 @@ void kb_init(void)
 	write_port(0x21 , 0xFD);
 }
 
-int	is_tty_sign(int keycode)
+int	is_tty_sym(int keycode)
 {
 	if (keycode == 0x3b || keycode == 0x3c || keycode == 0x3d)
 		return 1;
@@ -49,7 +49,7 @@ void	keyboard_handler_main(void) {
 			keycode = read_port(KEYBOARD_DATA_PORT);
 			if(keycode < 0)
 				return;
-			if (is_tty_sign(keycode))
+			if (is_tty_sym(keycode))
 			{
 				//print("change tty detect\n");
 				change_tty(keycode);
@@ -72,7 +72,7 @@ void	keyboard_handler_main(void) {
 				vidptr[current_loc++] = GREEN;
 			}
 			current_loc = handle_scrolling(current_loc);
-//			move_cursor();
+			set_cursor(current_loc - 1);
 		}
 }
 

@@ -8,6 +8,8 @@ typedef unsigned int uint32;
 
 
 #define VGA_ADDRESS 0xB8000
+#define REG_SCREEN_CTRL 0x3D4
+#define REG_SCREEN_DATA 0x3D5
 #define BUFSIZE 2200
 #define NULL 0
 #define MAX_COLS 80
@@ -25,7 +27,7 @@ extern unsigned int new_line(void);
 extern void black_screen(void);
 extern int handle_scrolling(int cursor_offset);
 //extern void monitor_clear(void);
-extern void move_cursor(void);
+extern void set_cursor(int offset);
 
 enum vga_color {
     BLACK,
