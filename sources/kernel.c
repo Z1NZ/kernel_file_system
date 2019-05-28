@@ -17,7 +17,6 @@ unsigned int	new_line()
 	while (current_loc / 2 % MAX_COLS)
 		current_loc += 2;
 	cursor_y++;
-//	move_cursor();
 	return (current_loc);
 }
 
@@ -51,7 +50,6 @@ void	keyboard_handler_main(void) {
 				return;
 			if (is_tty_sym(keycode))
 			{
-				//print("change tty detect\n");
 				change_tty(keycode);
 				return;
 			}
@@ -63,7 +61,6 @@ void	keyboard_handler_main(void) {
 				{
 					current_loc -= 2;
 					vidptr[current_loc] = 0;
-//					cursor_x--;
 				}
 			}
 			else
@@ -72,7 +69,9 @@ void	keyboard_handler_main(void) {
 				vidptr[current_loc++] = GREEN;
 			}
 			current_loc = handle_scrolling(current_loc);
+			print(" ");
 			set_cursor(current_loc - 1);
+			current_loc -= 2;
 		}
 }
 
@@ -86,7 +85,6 @@ void kmain(void)
 	print(str);
 	print_color("we can write in red also \n", RED);
 	print_color("even in blue if we wish\n", BLUE);
-	//kb_init();
 	while(1)
 		keyboard_handler();	
 

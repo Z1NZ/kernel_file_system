@@ -3,8 +3,6 @@
 extern int current_loc;
 extern int j;
 extern char *vidptr;
-extern unsigned int cursor_x;
-extern unsigned int cursor_y;
 
 void	putchar(char c)
 {
@@ -30,8 +28,6 @@ void	putstr(char *str)
 			putchar(str[j]);
 			putcolor(GREEN);
 			current_loc += 2;
-		//	cursor_x++;
-		//	move_cursor();
 		}
 		set_cursor(current_loc);
 		j++;
@@ -44,7 +40,6 @@ void	putstr_color(char *str, int color)
 
 	while(str[j] != '\0') 
 	{
-		/* the character's ascii */
 		if (str[j] == '\n')
 			new_line();
 		else
@@ -52,7 +47,6 @@ void	putstr_color(char *str, int color)
 			putchar(str[j]);
 			putcolor(color);
 			current_loc += 2;
-		//	cursor_x += 2;
 		}
 		set_cursor(current_loc);
 		j++;
@@ -102,9 +96,6 @@ void	black_screen(void)
 		vidptr[j + 1] = BLACK; 		
 		j = j + 2;
 	}
-	cursor_y = 0;
-	cursor_x = 0;
-//	move_cursor();
 }
 
 int	get_screen_offset(int col, int row) 
