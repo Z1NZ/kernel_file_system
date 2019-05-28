@@ -10,7 +10,7 @@ typedef struct	ttys
 {
 	char		*ptr;
 	char		vga_buff[(MAX_COLS * MAX_ROWS) * 2];
-	int		xy;
+	int		cursor_loc;
 }		ttys;
 
 #endif
