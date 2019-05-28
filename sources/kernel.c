@@ -19,21 +19,44 @@ unsigned int	new_line()
 	cursor_y++;
 	return (current_loc);
 }
-
+/*
 void kb_init(void)
 {
 	print("kb_init\n");
-	/* 0xFD is 11111101 - enables only IRQ1 (keyboard)*/
+	// 0xFD is 11111101 - enables only IRQ1 (keyboard)
 	write_port(0x21 , 0xFD);
 }
-
+*/
 int	is_tty_sym(int keycode)
 {
 	if (keycode == 0x3b || keycode == 0x3c || keycode == 0x3d)
 		return 1;
 	return 0;
 }
+/*
+void	move_cursor(int keycode)
+{
+	if(current_loc / 2 % MAX_COLS)
+	{
 
+		if (keycode == 0x4B)
+			current_loc--;
+		else if (keycode == 0x4D)
+			current_loc++;
+	}
+
+}
+
+int	is_arrow(int keycode)
+{
+	if (keycode == 0x4B || keycode == 0x4D)
+	{
+		move_cursor(keycode);
+		return 1;
+	}
+	return 0;
+}
+*/
 void	keyboard_handler_main(void) {
 	unsigned char status;
 	char keycode;
@@ -50,11 +73,10 @@ void	keyboard_handler_main(void) {
 			if(keycode < 0)
 				return;
 			if (is_tty_sym(keycode))
-			{
 				change_tty(keycode);
-				return;
-			}
-			if (keyboard_map[keycode] == '\n')
+			/*else if (is_arrow(keycode))
+				move_cursor(keycode);*/
+			else if (keyboard_map[keycode] == '\n')
 				current_loc = new_line();
 			else if (keyboard_map[keycode] == '\b')
 			{

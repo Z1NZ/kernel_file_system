@@ -4,7 +4,7 @@ OBJ_PATH = ./obj/
 ASM_SRC = kernel.asm
 C_SRC = kernel.c display.c utils.c tty_handler.c
 LD_SRC = link.ld
-K_NAME = kernel
+K_NAME = kfs1
 
 INC = ./include/
 
