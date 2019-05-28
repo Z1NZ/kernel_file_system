@@ -1,11 +1,11 @@
 #!/bin/sh
 
-mkdir -p kfs/boot/grub
-cp kfs1 
+mkdir -p kfs_boot/boot/grub
+cp kfs1 kfs_boot/boot/
 echo "set timeout=1
 set default=1
 
 menuentry	\"kfs_1\"	{
 	multiboot /boot/kfs1
 	boot
-}" > kfs/boot/grub/grub.cfg
+}" > kfs_boot/boot/grub/grub.cfg

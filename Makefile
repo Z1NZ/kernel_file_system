@@ -23,13 +23,14 @@ all:
 	$(CASM) -f elf32 $(SRC_ASM) -o kasm.o
 	$(CC) -I $(INC) $(FLAGS) $(SRC_C) -c
 	ld -m elf_i386 -T $(SRC_LD) -o $(K_NAME) *.o
+	sh grub_config.sh
 
 run:
 	qemu-system-i386 -kernel $(K_NAME)
 
 clean:
 	rm -rf *.o
-
+	rm -rf kfs_boot
 fclean: clean
 	rm -rf $(K_NAME)
 	rm -rf $(OBJ_PATH)
