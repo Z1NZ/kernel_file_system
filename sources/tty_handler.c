@@ -24,6 +24,7 @@ int		check_tty_nbr(int keycode)
 		return 1;
 	else if (keycode == 0x3d)
 		return 2;
+	return 0;
 }
 
 void		change_tty(int keycode)
